@@ -146,9 +146,19 @@ Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, ca
 
         var hash = Hash.keccak256(rlpEncoded);
 
-
         var signature = Account.makeSigner(Nat.toNumber(transaction.chainId || "0x1") * 2 + 35)(Hash.keccak256(rlpEncoded), privateKey);
-        var rawTx = RLP.decode(rlpEncoded).slice(0,6).concat(Account.decodeSignature(signature));
+
+        var rawTx = RLP.decode(rlpEncoded).slice(0, 6).concat(Account.decodeSignature(signature));
+
+        var trimLeadingZero = function (hex) {
+            while (hex && hex.startsWith('0x0')) {
+                hex = '0x' + hex.slice(3);
+            }
+            return hex;
+        };
+        rawTx[7] = trimLeadingZero(rawTx[7]);
+        rawTx[8] = trimLeadingZero(rawTx[8]);
+
         var rawTransaction = RLP.encode(rawTx);
 
         var values = RLP.decode(rawTransaction);
