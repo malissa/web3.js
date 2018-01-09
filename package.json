@@ -10,7 +10,7 @@
     "test": "./test"
   },
   "scripts": {
-    "postinstall": "lerna bootstrap",
+    "postinstall": "./node_modules/lerna/bin/lerna.js bootstrap",
     "build": "gulp",
     "build-all": "gulp all",
     "release": "lerna bootstrap; gulp; lerna publish --skip-git; gulp version;",
